@@ -7,6 +7,7 @@
         <div class="form-wrap col-xs-6 col-lg-4 m-auto">
             <div class="form-group text-center">
                 <h2 class="logo-img mx-auto mt-5">新規登録</h2>
+                @include('commons.error_messages')
             </div>
             {!! Form::open(['route' => 'signup.display']) !!}
             @csrf

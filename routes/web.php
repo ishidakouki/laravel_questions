@@ -21,19 +21,25 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.display');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('users/{id}','UsersController@show')->middleware('auth')->name('users.show');
-Route::get('users/{id}/edit','UsersController@edit')->name('users.edit');
-Route::post('users/{id}','UsersController@update')->name('users.update');
+Route::group(['prefix' => 'users', 'as' => 'users.'], function(){
+  Route::get('/{id}','UsersController@show')->middleware('auth')->name('show');
+  Route::get('/{id}/edit','UsersController@edit')->name('edit');
+  Route::post('/{id}','UsersController@update')->name('update');
+});
 
-Route::get('questions/environment','QuestionsController@index')->name('questions.index');
-Route::get('questions/new','QuestionsController@create')->name('questions.create');
-Route::post('questions','QuestionsController@store')->name('questions.store');
-Route::get('questions/{id}/edit','QuestionsController@edit')->name('questions.edit');
-Route::post('questions/{id}/environment','QuestionsController@update')->name('questions.update');
-Route::delete('questions{id}','QuestionsController@destroy')->name('questions.destroy');
+Route::group(['as' => 'questions.'], function(){
+  Route::get('questions/environment','QuestionsController@index')->name('index');
+  Route::get('questions/new','QuestionsController@create')->name('create');
+  Route::post('questions','QuestionsController@store')->name('store');
+  Route::get('questions/{id}/edit','QuestionsController@edit')->name('edit');
+  Route::post('questions/{id}/environment','QuestionsController@update')->name('update');
+  Route::delete('questions{id}','QuestionsController@destroy')->name('destroy');
+});
 
-Route::post('questions/comments/{id}new','CommentsController@create')->name('comments.create');
-Route::post('questions/comments','CommentsController@store')->name('comments.store');
-Route::get('questions/comments/{id}/edit', 'CommentsController@edit')->name('comments.edit');
-Route::put('questions/comments/{id}', 'CommentsController@update')->name('comments.update');
-Route::delete('questions/comments/{id}', 'CommentsController@destroy')->name('comments.destroy');
+Route::group(['prefix' => 'questions', 'as' => 'comments.'], function(){
+  Route::post('/comments/{id}new','CommentsController@create')->name('create');
+  Route::post('/comments','CommentsController@store')->name('store');
+  Route::get('/comments/{id}/edit', 'CommentsController@edit')->name('edit');
+  Route::put('/comments/{id}', 'CommentsController@update')->name('update');
+  Route::delete('/comments/{id}', 'CommentsController@destroy')->name('destroy');
+});

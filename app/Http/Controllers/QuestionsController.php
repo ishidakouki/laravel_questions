@@ -34,17 +34,16 @@ class QuestionsController extends Controller
     }
     public function edit(Question $question, $id)
     {
-        $question = Question::findOrFail($id);
+        $question = Question::find($id);
 
         if($question->user_id !== \Auth::id()){
-            return view('questions.index')
-                    ->with('error','許可されていない操作です');
+            return view('questions.index')->with('error','許可されていない操作です');
         }
         return view('questions.edit',compact('question'));
     }
     public function update(QuestionsRequest $request, $id)
     {
-        $question = Question::findOrFail($id);
+        $question = Question::find($id);
 
         if(Auth::id() == $question->user_id)
         {
@@ -56,8 +55,7 @@ class QuestionsController extends Controller
 
             return redirect()->route('questions.index');
         }
-        return redirect()->route('questions.index')
-                    ->with('error', '許可されていない操作です');
+        return redirect()->route('questions.index')->with('error', '許可されていない操作です');
     }
     public function destroy($id)
     {

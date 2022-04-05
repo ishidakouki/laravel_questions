@@ -29,13 +29,13 @@ class CommentsController extends Controller
         return redirect()->route('questions.index');
     }
     public function edit($id) {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
         return view('comments.edit', compact('comment'));
     }
 
     public function update(CommentEditRequest $request, $id)
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
 
         if(Auth::id() == $comment->user->id){
             $comment->comment = $request->comments;
@@ -44,17 +44,15 @@ class CommentsController extends Controller
             return redirect()->route('questions.index');
         }
 
-        return redirect()->route('questions.index')
-                    ->with('error', '許可されていない操作です');
+        return redirect()->route('questions.index')->with('error', '許可されていない操作です');
     }
 
     public function destroy($id)
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
 
         if(Auth::id() !== $comment->user->id){
-            return redirect()->route('questions.index')
-                        ->with('error', '許可されていない操作です');
+            return redirect()->route('questions.index')->with('error', '許可されていない操作です');
         }
 
         $comment -> delete();
